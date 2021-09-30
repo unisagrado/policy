@@ -1,0 +1,11 @@
+@tailwind base;
+@tailwind components;
+@tailwind utilities;
+
+:root {
+  font-family: "Inter", sans-serif;
+}
+
+.container {
+  @apply flex flex-col justify-center justify-items-center items-center max-w-7xl m-auto h-full;
+}
