@@ -18,10 +18,10 @@
         <h1 class="uppercase text-4xl text-center max-w-lg mt-10">Proteção de dados pessoais no <strong>UNISAGRADO<strong></h1>
       </div>
     </header>
-    <main class="bg-white">
+    <main class="bg-white p-4">
       <section class="container text-black py-20">
         <div class="flex items-start">
-          <div class="w-1/2 mr-8 mt-10">
+          <div class="w-full mr-8 mt-10 lg:w-1/2">
             <h2 class="text-textPrimary mb-4 uppercase font-bold"> O que é a LGPD?</h2>
             <p class="text-left font-light text-normal">
               A Lei Geral de Proteção de Dados Pessoais 13.709/2018 dispõe sobre 
@@ -32,15 +32,15 @@
               personalidade da pessoa natural. 
             </p>
           </div>
-          <div class="w-1/2">
+          <div class="hidden lg:w-1/2 lg:block">
             <img src="img/lock.png" class="max-w-xs m-auto" />
           </div>
         </div>
         <div class="flex items-start">
-          <div class="w-1/2">
+          <div class="hidden lg:w-1/2 lg:block">
             <img src="img/computer.png" class="max-w-xl m-auto" />
           </div>
-          <div class="w-1/2 ml-8 mt-10">
+          <div class="w-full ml-8 mt-10 lg:w-1/2">
             <h2 class="text-textPrimary mb-4 text-right uppercase font-bold">O que são dados pessoais?</h2>
             <p class="text-right text-normal font-light">
               Dados pessoais são informações relacionadas à pessoa natural 
@@ -54,8 +54,8 @@
           </div>
         </div>
         <div class="flex items-start">
-          <div class="w-1/2 ml-8 mt-10">
-            <h2 class="text-textPrimary mb-4 text-left uppercase font-bold">O que são dados cookies?</h2>
+          <div class="w-full mr-8 mt-10 lg:w-1/2">
+            <h2 class="text-textPrimary mb-4 text-left uppercase font-bold">O que são cookies?</h2>
             <p class="text-left text-normal font-light">
               São ferramentas de observação na internet. Quando você acessa 
               sites, eles podem enviar pequenos arquivos de texto (cookies) para 
@@ -65,15 +65,15 @@
               e etc.
             </p>
           </div>
-          <div class="w-1/2">
+          <div class="hidden lg:w-1/2 lg:block">
             <img src="img/cookies.png" class="max-w-xl m-auto" />
           </div>
         </div>
         <div class="flex items-start">
-          <div class="w-1/2">
+          <div class="hidden lg:w-1/2 lg:block">
             <img src="img/data.png" class="max-w-xl m-auto" />
           </div>
-          <div class="w-1/2 ml-8 mt-10 text-right text-normal font-light">
+          <div class="w-full ml-8 mt-10 text-right text-normal font-light lg:w-1/2 ">
             <h2 class="text-textPrimary mb-4 uppercase font-bold">Como utilizamos os dados</h2>
             <p>
               As informações coletadas pelo UNISAGRADO têm como finalidade 
@@ -101,7 +101,7 @@
         </div>
       </section>
     </main>
-    <footer class="bg-secondary w-full py-4">
+    <footer class="bg-secondary w-full py-4 px-2">
       <div class="container text-white">
         <div class="max-w-5xl text-center mt-10">
           <h2 class="font-bold text-3xl mb-10"> Políticas de Privacidade </h2>
@@ -110,11 +110,11 @@
             segura acessando nossa Política de Privacidade na íntegra.
           </p>
         </div>
-        <div class="flex justify-between my-20">
-          <a href="https://unisagrado.edu.br/politica-de-privacidade" class="mr-7 uppercase text-light block bg-neutral rounded-lg px-6 py-3 font-bold">
+        <div class="flex justify-evenly my-20">
+          <a href="https://unisagrado.edu.br/politica-de-privacidade" class="mr-2 uppercase text-light block bg-neutral rounded-lg px-6 py-3 font-bold">
             Política de Privacidade UNISAGRADO
           </a>
-          <button type="button" class="ml-7 uppercase text-light block bg-neutral rounded-lg px-6 py-3 font-bold" id="contact">
+          <button type="button" class="ml-2 uppercase text-light block bg-neutral rounded-lg px-6 py-3 font-bold" id="contact">
             Canal de Comunicação
           </button>
         </div>
@@ -125,9 +125,9 @@
 
     <div class="fixed hidden inset-0 bg-gray-600 bg-opacity-50 overflow-y-auto h-full w-full" id="modal">
       <div
-        class="relative top-20 mx-auto p-8 border w-1/2 shadow-lg rounded-xl bg-white"
+        class="relative top-20 mx-auto p-8 border w-3/4 lg:w-1/2 shadow-lg rounded-xl bg-white"
       >
-        <div class="mt-3 text-center">          
+        <div class="mt-3 text-center text-base">          
           <div class="mt-2 px-7 py-3">
             <p class="text-justify">
               Olá! Fale com o nosso <strong>DPO (data protection officer)</strong>! 

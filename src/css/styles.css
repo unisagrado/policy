@@ -2,8 +2,25 @@
 @tailwind components;
 @tailwind utilities;
 
-:root {
-  font-family: "Inter", sans-serif;
+* {
+  @apply m-0 p-0 box-border;
+}
+
+body,
+button {
+  font: 500 1rem "Inter", sans-serif;
+}
+
+@media (max-width: 1080px) {
+  html {
+    font-size: 93.75%;
+  }
+}
+
+@media (max-width: 720px) {
+  html {
+    font-size: 87.5%;
+  }
 }
 
 .container {
