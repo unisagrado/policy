@@ -14,6 +14,9 @@
 </head>
 
 <body class="m-0 p-0">
+    <div id="main-alert">
+
+    </div>
     <header class="bg-primary w-full h-80">
         <div class="container text-white">
             <img src="img/logo.png" class="max-w-xs" />
@@ -142,7 +145,7 @@
                         <p>Something happened that you should know about.</p>
                     </div>
                     <br>
-                    <div class="flex flex-wrap -mx-3">
+                    <div class="flex flex-wrap -mx-3 mb-6">
                         <div class="w-full md:w-1/2 px-3 mb-6 md:mb-0">
                             <label class="block mb-2">Nome Completo</label>
                             <input alias="Nome Completo" name="name" id="name" class="shadow appearance-none border rounded w-full py-2 px-3 text-gray-700 leading-tight focus:outline-none focus:shadow-outline" type="text" placeholder="Nome Completo">
@@ -159,21 +162,21 @@
                         </div>
                         <div class="w-full md:w-1/2 px-3 mb-6 md:mb-0">
                             <label class="block mb-2" for="password">Eu Sou</label>
-                            <select alias="Eu sou" name="category" id="category" class="block appearance-none w-full border text-gray-700 py-3 px-4 pr-8 rounded leading-tight focus:outline-none focus:shadow-outline" id="grid-state">
-                          <option value="">-Selecione-</option>
-                          <option value="1">Candidato</option>
-                          <option value="2">Aluno</option>
-                          <option value="3">Egresso</option>
-                          <option value="4">Responsável Legal</option>
-                          <option value="5">Professor</option>
-                          <option value="6">Ex-Professor</option>
-                          <option value="7">Colaborador</option>
-                          <option value="8">Ex-Colaborador</option>
-                          <option value="9">Paciente</option>
-                          <option value="10">Fornecedor</option>
-                          <option value="11">Parceiro</option>
-                          <option value="12">Público Externo</option>
-                        </select>
+                            <select alias="Eu sou" name="category_id" id="category_id" class="block appearance-none w-full border text-gray-700 py-3 px-4 pr-8 rounded leading-tight focus:outline-none focus:shadow-outline" id="grid-state">
+                              <option value="">-Selecione-</option>
+                            </select>
+                        </div>
+                    </div>
+                    <div class="flex flex-wrap -mx-3 mb-6">
+                        <div class="w-full px-3 mb-6 md:mb-0">
+                            <label class="block mb-2">Email</label>
+                            <input alias="Email" name="email" id="email" class="shadow appearance-none border rounded w-full py-2 px-3 text-gray-700 leading-tight focus:outline-none focus:shadow-outline" type="text" placeholder="Telefone">
+                        </div>
+                    </div>
+                    <div class="flex flex-wrap -mx-3 mb-6">
+                        <div class="w-full px-3 mb-6 md:mb-0">
+                            <label class="block mb-2">Assunto</label>
+                            <textarea name="subject" id="subject" alias="Assunto" rows="6" class="shadow appearance-none border rounded w-full py-2 px-3 text-gray-700 leading-tight focus:outline-none focus:shadow-outline" placeholder="Assunto..."></textarea>
                         </div>
                     </div>
                     <div class="flex items-center justify-center">
@@ -186,8 +189,14 @@
         </div>
         </div>
 
+        <script src="../src/js/jquery.min.js"></script>
+        <script src="../src/js/jquery.mask.min.js"></script>
         <script src="../config.js"></script>
         <script>
+            //setting masks
+            $('#cpf').mask('000.000.000-00');
+            $('#fone').mask('(00) 00000-0000');
+            //
             let modal = document.querySelector('#modal');
             let okButton = modal.querySelector('#ok-button');
             let contactButton = document.querySelector('#contact')
@@ -197,12 +206,20 @@
             let name = document.getElementById('name')
             let cpf = document.getElementById('cpf')
             let fone = document.getElementById('fone')
-            let category = document.getElementById('category')
+            let category_id = document.getElementById('category_id')
+            let email = document.getElementById('email')
+            let subject = document.getElementById('subject')
             let alert = document.getElementById('alert')
             form.addEventListener('submit', submitForm)
 
             function toggleModal(e) {
                 modal.classList.toggle('hidden');
+                name.value = ''
+                cpf.value = ''
+                fone.value = ''
+                category_id.value = ''
+                subject.value = ''
+                email.value = ''
             }
 
             async function submitForm(e) {
@@ -211,16 +228,63 @@
                     name: name.value,
                     cpf: cpf.value,
                     fone: fone.value,
-                    category: category.value,
+                    category_id: category_id.value,
+                    subject: subject.value,
+                    email: email.value,
                 }
 
                 if (getErrors(data)) return false;
+                if (!verifyEmail(data.email)) return false;
 
                 let body = getFormData(data)
-                let response = await fetch(ENV.API_URL + '/store', {
+                let response = await fetch(ENV.API_URL + '/solicitation/store', {
                     method: 'POST',
+                    headers: {
+                        'Accept': 'application/json'
+                    },
                     body
                 });
+
+                $("#main-alert").html(function() {
+                    let color = 'red'
+                    let textStrong = 'OPS!'
+                    let text = 'Ocorreu um erro ao enviar seu formulário!'
+                    if (response.status === 200) {
+                        color = 'green'
+                        textStrong = 'Sucesso'
+                        text = 'Seu formulário foi enviado com sucesso!'
+                    }
+
+                    return `
+                    <div class="bg-${color}-100 border border-${color}-400 text-${color}-700 px-4 py-3 rounded fixed top-1 right-1" role="alert">
+                        <strong class="font-bold">${textStrong}</strong>
+                        <span class="block sm:inline">${text}</span>
+                    </div>
+                    `
+
+                })
+
+                toggleModal();
+
+                setTimeout(() => {
+                    $('#main-alert').html('')
+                }, 5000)
+            }
+
+            function verifyEmail(cEmail) {
+                let regex = new RegExp('[a-z0-9]+@[a-z]+\.[a-z]{2,3}');
+                if (regex.test(cEmail)) {
+                    email.classList.remove('border-red-500')
+                    alert.classList.add('hidden')
+                    alert.classList.remove('flex')
+                    return true;
+                } else {
+                    alert.innerHTML = 'Email inválido!'
+                    email.classList.add('border-red-500')
+                    alert.classList.remove('hidden')
+                    alert.classList.add('flex')
+                    return false;
+                }
             }
 
             function getFormData(object) {
@@ -260,6 +324,20 @@
                 }
 
                 return emptyFields.length > 0
+            }
+
+            window.onload = function() {
+                getCategories();
+            }
+
+            async function getCategories() {
+                let response = await fetch(ENV.API_URL + '/categories/all', {
+                    method: 'POST',
+                });
+                let data = await response.json();
+                data.categories.forEach(currentCateogory => {
+                    $('#category_id').append(`<option value="${currentCateogory.id}">${currentCateogory.title}</option>`)
+                })
             }
 
             contactButton.addEventListener('click', toggleModal);
