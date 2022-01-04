@@ -124,7 +124,7 @@
       </div>
           </footer>
 
-          <div class="fixed hidden inset-0 bg-gray-600 bg-opacity-50 overflow-y-auto h-full w-full" id="modal">
+          <div class="fixed hidden inset-0 bg-gray-600 bg-opacity-50 overflow-y-auto h-full w-full pb-36" id="modal">
             <div
         class="relative top-20 mx-auto p-8 border w-3/4 lg:w-1/2 shadow-lg rounded-xl bg-white"
       >
@@ -203,34 +203,42 @@
 
             //form
             let form = document.getElementById('form')
-            let name = document.getElementById('name')
-            let cpf = document.getElementById('cpf')
-            let fone = document.getElementById('fone')
-            let category_id = document.getElementById('category_id')
-            let email = document.getElementById('email')
-            let subject = document.getElementById('subject')
+            let fields = {}
+            fields.name = document.getElementById('name')
+            fields.cpf = document.getElementById('cpf')
+            fields.fone = document.getElementById('fone')
+            fields.category_id = document.getElementById('category_id')
+            fields.email = document.getElementById('email')
+            fields.subject = document.getElementById('subject')
             let alert = document.getElementById('alert')
             form.addEventListener('submit', submitForm)
 
             function toggleModal(e) {
                 modal.classList.toggle('hidden');
-                name.value = ''
-                cpf.value = ''
-                fone.value = ''
-                category_id.value = ''
-                subject.value = ''
-                email.value = ''
+                fields.name.value = ''
+                fields.cpf.value = ''
+                fields.fone.value = ''
+                fields.category_id.value = ''
+                fields.subject.value = ''
+                fields.email.value = ''
+            }
+
+            function clearErrors() {
+                Object.keys(fields).forEach(key => {
+                    fields[key].classList.remove('border-red-400')
+                })
             }
 
             async function submitForm(e) {
                 e.preventDefault();
+                clearErrors();
                 let data = {
-                    name: name.value,
-                    cpf: cpf.value,
-                    fone: fone.value,
-                    category_id: category_id.value,
-                    subject: subject.value,
-                    email: email.value,
+                    name: fields.name.value,
+                    cpf: fields.cpf.value,
+                    fone: fields.fone.value,
+                    category_id: fields.category_id.value,
+                    subject: fields.subject.value,
+                    email: fields.email.value,
                 }
 
                 if (getErrors(data)) return false;
@@ -245,26 +253,34 @@
                     body
                 });
 
+                let responseData = await response.json();
+
                 $("#main-alert").html(function() {
-                    let color = 'red'
-                    let textStrong = 'OPS!'
-                    let text = 'Ocorreu um erro ao enviar seu formulário!'
-                    if (response.status === 200) {
-                        color = 'green'
-                        textStrong = 'Sucesso'
-                        text = 'Seu formulário foi enviado com sucesso!'
+                    let color = 'green'
+                    let textStrong = 'Sucesso'
+                    let text = 'Seu formulário foi enviado com sucesso!'
+                    if (response.status === 200)
+                        toggleModal();
+                    else if (response.status != 200) {
+                        color = 'red'
+                        textStrong = 'OPS!'
+                        text = ''
+
+                        Object.keys(responseData.errors).forEach(key => {
+                            text += '<br>' + responseData.errors[key]
+
+                            fields[key].classList.add('border-red-400')
+                        })
                     }
 
                     return `
-                    <div class="bg-${color}-100 border border-${color}-400 text-${color}-700 px-4 py-3 rounded fixed top-1 right-1" role="alert">
+                    <div class="bg-${color}-100 border border-${color}-400 text-${color}-700 px-4 py-3 rounded fixed top-1 right-1 z-50" role="alert">
                         <strong class="font-bold">${textStrong}</strong>
                         <span class="block sm:inline">${text}</span>
                     </div>
                     `
 
                 })
-
-                toggleModal();
 
                 setTimeout(() => {
                     $('#main-alert').html('')
