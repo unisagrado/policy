@@ -179,7 +179,7 @@
                             <textarea name="subject" id="subject" alias="Assunto" rows="6" class="shadow appearance-none border rounded w-full py-2 px-3 text-gray-700 leading-tight focus:outline-none focus:shadow-outline" placeholder="Assunto..."></textarea>
                         </div>
                     </div>
-                    <div class="g-recaptcha mb-6" data-sitekey="6Le6J2ceAAAAAMNbhdpNBVecyj6EOkm-8edLw8sL"></div>
+                    <div class="g-recaptcha mb-6" data-sitekey="6LeIxAcTAAAAAJcZVRqyHh71UMIEGNQ_MXjiZKhI"></div>
                     <div class="flex items-center justify-center">
                         <button type="button" id="ok-button" class="uppercase text-light block bg-gray-600 rounded-lg px-4 py-2 text-white">OK</button>&nbsp;&nbsp;
                         <button class="bg-blue-500 hover:bg-blue-700 text-white font-bold py-2 px-4 rounded focus:outline-none focus:shadow-outline" type="submit">Enviar</button>
@@ -246,7 +246,18 @@
                 if (getErrors(data)) return false;
                 if (!verifyEmail(data.email)) return false;
 
+                var recaptcha = await grecaptcha.getResponse();
+
+                if (recaptcha.length == 0) {
+                    email.classList.add('border-red-500')
+                    alert.classList.remove('hidden')
+                    alert.classList.add('flex')
+                    alert.innerHTML = 'Preencha o ReCaptch (Não sou um Robo)';
+                    return false;
+                }
+
                 let body = getFormData(data)
+                body.append('recaptcha', recaptcha)
                 let response = await fetch(ENV.API_URL + '/solicitation/store', {
                     method: 'POST',
                     headers: {
